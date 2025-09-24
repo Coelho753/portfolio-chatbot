@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Teste OpenAI Proxy</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 20px;
+      background: #f9f9f9;
+    }
+    h1 { color: #333; }
+    textarea {
+      width: 100%;
+      height: 100px;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+    button {
+      padding: 10px 20px;
+      cursor: pointer;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+    }
+    pre {
+      background: #eee;
+      padding: 10px;
+      white-space: pre-wrap;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Teste com API Proxy (OpenAI)</h1>
+  <textarea id="prompt" placeholder="Digite sua pergunta aqui..."></textarea>
+  <br />
+  <button onclick="enviar()">Enviar</button>
+  <h3>Resposta:</h3>
+  <pre id="resposta"></pre>
+
+  <script>
+    async function enviar() {
+      const prompt = document.getElementById("prompt").value;
+      const respostaEl = document.getElementById("resposta");
+
+      respostaEl.textContent = "⏳ Carregando...";
+
+      try {
+        const res = await fetch("http://localhost:3000/api", {  // altere se estiver no Render
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ prompt })
+        });
+
+        if (!res.ok) {
+          const text = await res.text();
+          respostaEl.textContent = "Erro: " + text;
+          return;
+        }
+
+        const data = await res.json();
+        respostaEl.textContent = data.reply;
+      } catch (err) {
+        respostaEl.textContent = "Erro na conexão: " + err.message;
+      }
+    }
+  </script>
+</body>
+</html>
