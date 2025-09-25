@@ -1,0 +1,6 @@
+POST https://portfolio-chatbot-dg37.onrender.com/chat
+Content-Type: application/json
+
+{
+  "prompt": "Olá, quem é você?"
+}
